@@ -1,6 +1,6 @@
 {
-    "extends": "google",
+    "extends": "airbnb",
     "parserOptions": {
        "ecmaVersion": 6
-     }
+    }
 }
