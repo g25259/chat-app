@@ -7,14 +7,15 @@
   </head>
   <body>
     <p>Welcome to the chat app </p>
-    <textarea id="textarea"></textarea>
-    <form action="/msg" method="POST" id="msgForm"> 
-      <input type="text" name="msg" id="msg">
+
+    <ol id="msgs"></ol>
+    <form action="/msg" method="POST" id="msg-form"> 
+      <input type="text" name="msg" placeholder="Messages" id="msg">
+      <button>Send</button>
     </form>
-    <button onclick="sendMsg()" type="submit" form="msgForm"
-     value="Submit">Send</button>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/js/index.js"></script>
   </body>
 </html>
