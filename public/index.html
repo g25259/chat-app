@@ -4,19 +4,30 @@
   <head>
     <title>Chat App</title>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/styles.css">
   </head>
-  <body>
-    <p>Welcome to the chat app </p>
+  <body class="chat">
 
-    <ol id="msgs"></ol>
-    <form action="/msg" method="POST" id="msg-form"> 
-      <input type="text" name="msg" placeholder="Messages" id="msg">
-      <button>Send</button>
-    </form>
-    <button id="send-location">Send location</button>
+    <div class="chat__sidebar">
+      <h3>People</h3>
+      <div id="users"></div>
+      </div>
+      
+      <div class="chat__main">
+        <ol id="msgs" class="chat__messages"></ol>
+        <div class="chat__footer">
+          <form action="/msg" method="POST" id="msg-form">
+            <input type="text" name="msg" placeholder="Message" id="msg" autofocus autocomplete="off">
+            <button>Send</button>
+          </form>
+          <button id="send-location">Send location</button>
+        </div>
+    </div>
+
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.20.1/moment.min.js"></script>
     <script src="/js/index.js"></script>
   </body>
 </html>
