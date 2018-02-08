@@ -1,4 +1,3 @@
-require('chai').should();
 const {expect} = require('chai');
 
 const {generateMessage} = require('./message');
