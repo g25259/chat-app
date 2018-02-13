@@ -3,6 +3,7 @@ const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
 const socketIO = require('socket.io');
+const {User, Users} = require('./utils/users');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
@@ -11,6 +12,7 @@ const publicPath = path.join(__dirname, '../../public');
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+const users = new Users();
 
 app.use(express.static(publicPath));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -19,17 +21,21 @@ app.use(bodyParser.json());
 io.on('connection', (socket) => {
     console.log('New user connected');
 
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat app'));
-
-    socket.broadcast.emit('newMessage',
-     generateMessage('Admin', 'New user joined'));
-
     socket.on('join', (params, callback) => {
-       if (!isRealString(params.name) || !isRealString(params.room)) {
-           callback('Name and room are required');
-       }
+        if (!isRealString(params.name) || !isRealString(params.room)) {
+            return callback('Name and room are required');
+        }
 
-       callback();
+        socket.join(params.room);
+        users.removeUser(socket.id);
+        users.addUser(new User(socket.id, params.name, params.room));
+
+        io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+        socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat app'));
+        socket.broadcast.to(params.room).emit('newMessage',
+            generateMessage('Admin', `${params.name} has joined`));
+
+        callback();
     });
 
     socket.on('createMessage', (message, callback) => {
@@ -40,13 +46,12 @@ io.on('connection', (socket) => {
 
     socket.on('createLocationMessage', (coords) => {
         io.emit('newLocationMessage',
-         generateLocationMessage('Admin',
-          coords.latitude, coords.longitude));
+            generateLocationMessage('Admin',
+                coords.latitude, coords.longitude));
     });
 
     socket.on('disconnect', () => {
-        console.log('User was disconnected');
-        console.log('test');
+        
     });
 });
 

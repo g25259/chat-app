@@ -7,7 +7,7 @@
     "start": "node src/server/server.js",
     "test": "mocha src/server/**/*.test.js",
     "test-watch": "nodemon --exec 'npm test'",
-	"build": "babel src/public/js -d public/js"
+    "build": "babel src/public/js -d public/js"
   },
   "dependencies": {
     "chai-as-promised": "^7.1.1",
